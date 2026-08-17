@@ -1,0 +1,13 @@
+{
+	"packageName":"CellularAutomata",
+	"files":[
+		"CellularAutomata.wl"
+	],
+	"directories":[
+		"CellularAutomata_info"
+	],
+	"excludePatterns":[
+		"CellularAutomata_info\/history\/",
+		"CellularAutomata_info\/references\/"
+	]
+}

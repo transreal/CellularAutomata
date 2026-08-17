@@ -1,0 +1,7 @@
+<Configuration defaultValue="0.00, 0.00, 0.00, 0.00, 0.00">
+	<Value name="2,9">5.00, 0.00, 7.00, 0.00, 0.00</Value>
+	<Value name="3,9">3.00, 0.00, 1.00, 0.00, 5.00</Value>
+	<Value name="4,9">1.00, 0.00, 1.00, 0.00, 5.00</Value>
+	<Value name="5,9">2.00, 0.00, 1.00, 0.00, 5.00</Value>
+	<Value name="6,9">7.00, 0.00, 0.00, 0.00, 5.00</Value>
+</Configuration>

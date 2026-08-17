@@ -1,0 +1,44 @@
+<CellularAutomaton>
+	<Header>
+		<name>Life</name>
+		<comment>No comment.</comment>
+	</Header>
+	<Geometry type="Square">
+		<cellRange>{{0, 0}, {30, 30}}</cellRange>
+	</Geometry>
+	<Rule>
+		<parameter>
+			alpha, (0, 1);
+		</parameter>
+		<infixExpression>
+			hash(center(), sum(@Neighbor(Moore, 1, 1)))
+		</infixExpression>
+		<Hash>
+			<undefinedDefault>0</undefinedDefault>
+			<rotational>NO</rotational>
+			<transitionRules>
+				(0,3) => 1;
+				(1,2) => 1;
+				(1,3) => 1;
+				(0,*) => 0;
+				(1,*) => 0;
+			</transitionRules>
+		</Hash>
+	</Rule>
+	<CellFile src="">
+	<Design>
+		<valueRange>(0, 1)</valueRange>
+		<cellFillColor>
+			<stateRGBAColor value="3">255, 0, 0, 200</stateRGBAColor>
+			<stateRGBAColor value="2">0, 255, 255, 200</stateRGBAColor>
+			<stateRGBAColor value="1">0, 0, 0, 200</stateRGBAColor>
+			<stateRGBAColor value="0">255, 255, 255, 200</stateRGBAColor>
+			<RedGradation>(0, 255, 255)@(0, 0.5, 1)</RedGradation>
+			<GreenGradation>(0, 0)@(0, 1)</GreenGradation>
+			<BlueGradation>(255, 255, 0)@(0, 0.5, 1)</BlueGradation>
+			<AlphaGradation>(175, 175)@(0,1)</AlphaGradation>
+		</cellFillColor>
+		<lineRGBAColor>128, 128, 128, 128</lineRGBAColor>
+		<undefinedRGBAColor>255, 0, 0, 255</undefinedRGBAColor>
+	</Design>
+</CellularAutomaton>
