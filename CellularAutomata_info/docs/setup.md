@@ -182,7 +182,7 @@ Block[{$CharacterEncoding = "UTF-8"},
 - **一般化 de Bruijn 多重格子タイリング**: `GenerateMultigridRhombs[symOrder, range, offset]`（Ammann–Beenker・七角形・十二角形など任意の対称次数に対応。`GenerateABRhombs[]`/`DrawABTiling[]` はAmmann–Beenker専用のラッパー）
 - **True Partitioned CA (PCA5)**: `CreatePCA5Rule[]`
 - **PCA5 の可逆性判定と逆ルール生成**: `IsReversiblePCA5[]` / `InvertPCA5Rule[]`
-- **統一ファイルベースシミュレーター**: `CASimulator[cafile]`（ジオメトリとルール種別を自動判定）
+- **統一ファイルベースシミュレーター**: `CASimulator[cafile]`（ジオメトリとルール種別を自動判定。SR8など複雑な多状態ルール／de Bruijn幾何（RPT）上のワームやループ構造の実験もこのインターフェースで読み込めます）
 - **iOS シミュレーターとの互換**: `LoadiOSRuleFile[]`
 
 詳細は各関数のヘルプ（`?関数名`）または [GitHub](https://github.com/transreal/CellularAutomata) のドキュメントをご参照ください。

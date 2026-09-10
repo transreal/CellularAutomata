@@ -3070,6 +3070,51 @@ CASimulator[graph_Association, rule_Association] :=
   kdTiles = GeneratePenroseKD[{-1, -1, 15, 15}, {0, 0.1, -0.1, 0.2, -0.2}];
   kdGraph = BuildKDTilingGraph[kdTiles];
   PCA5Simulator[kdGraph, rptPCA]
+
+  (* 21. SR8 ribbon worms on Penrose rhomb (file-based) *)
+  (* Shortest 3-cell worms travelling straight along a de Bruijn ribbon. *)
+  (* Signal pairs read at the head: (A,A)=advance straight,              *)
+  (* (B,B)=2-way branch, (B,A)=3-way branch.                             *)
+  (* branch2 self-reproduces as a comb; with the 3-cell body distant     *)
+  (* teeth cross at t=159, branch3's 2nd generation collides at t=26     *)
+  (* (square lattice: t=53). Collision time grows with body length:      *)
+  (* the 8-cell branch2-L8 is collision-free for 800+ steps (all worms   *)
+  (* exit the region), branch3-L8 is clean to t=234 (~4 generations) -   *)
+  (* the exponential 3-way tree must eventually self-collide.            *)
+  CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-straight.caconf"]
+  CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-branch2.caconf"]
+  CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-branch3.caconf"]
+  CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-ribbonworm-branch2-L8.caconf"]
+  CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-ribbonworm-branch3-L8.caconf"]
+
+  (* 22. SR8 R-Loop on RPT: a degree-4 vertex loop (AA gene) with the DB     *)
+  (* start command. On the square lattice this self-reproduces; on RPT the   *)
+  (* mother reseals itself unharmed and ejects a small C-gene worm that      *)
+  (* wanders quasi-randomly for ~4000 steps before crashing back into the    *)
+  (* mother. No RPT site (3082 tried) yields a second loop.                  *)
+  CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-loop-deg4-DB.caconf"]
+
+  (* 23. SR8-RPTx: SR8 auto-completed over the inputs actually reached on    *)
+  (* RPT (765 + 4804 = 5569 rules; injectivity machine-verified, so the      *)
+  (* local map stays reversible-extendable; rotation-closed). Strictly       *)
+  (* extends SR8 - defined behavior is unchanged; former crashes fossilize   *)
+  (* into compact static debris instead of erasing patterns. Under RPTx the  *)
+  (* deg-4 loop survives its wanderer's return (mother intact at t=8000),    *)
+  (* and the branch3 worm colony keeps growing past its old t=26 death.      *)
+  (* Regenerate/extend with sr8RPTx_generator.wl (keep its fallback narrow). *)
+  CASimulator["sr8RPTx.txt", "sr8RPT-loop-deg4-DB.caconf"]
+  CASimulator["sr8RPTx.txt", "sr8RPT-ribbonworm-branch3.caconf"]
+
+  (* 24. SR8-RPTd: designed 9-state extension (state 8 = trace marker,      *)
+  (* 3 = photon) implementing splice-and-cut docking: a head that touches   *)
+  (* a wire cell bonds to it, the upstream bond is cut and the displaced    *)
+  (* upstream cell becomes a new head. The same rules give worm-to-loop     *)
+  (* absorption and self-closure (cycle plus detached worm). Every designed *)
+  (* output carries a marker so the table stays injective (reversible);     *)
+  (* markers pass through or deflect off wires and fly away in empty space. *)
+  (* Under RPTd the deg-4 loop absorbs its returning wanderer (7-cell       *)
+  (* stable structure, no undefined transition to t=5000).                  *)
+  CASimulator["sr8RPTd.txt", "sr8RPT-loop-deg4-DB.caconf"]
 *)
 
 (* ============================================================ *)

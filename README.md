@@ -93,6 +93,7 @@ CASimulator[cafile]
 - `GenerateSquareGrid` - 正方格子タイリング（原点オフセット`x0, y0`指定可）
 - `GenerateMultigridRhombs` - 任意対称位数のde Bruijnマルチグリッドタイリング（七角形・Ammann–Beenker・十二角形など）
 - `GenerateABRhombs` - Ammann–Beenkerタイリング専用ショートカット
+- `TileVertices` / `TileType` - タイルの頂点座標・種類の取得
 
 **近傍グラフ構築**:
 - `BuildTilingGraph` / `BuildKDTilingGraph` - Moore/Neumann近傍とneighborType分類
@@ -102,7 +103,7 @@ CASimulator[cafile]
 - `NeumannDirection` - 近傍タイルへの方向インデックス取得
 
 **セルラーオートマトン**:
-- `CreateCARule` - 一般CA規則（GCA）作成
+- `CreateCARule` - 一般CA規則（GCA/Partitioned）作成
 - `CreatePCA5Rule` - 真の5近傍分割CA規則作成
 - `CAStep` / `CAEvolve` - GCA/PartitionedCAのシミュレーション実行
 - `PCA5Step` / `PCA5Evolve` - PCA5専用のシミュレーション実行
@@ -120,6 +121,9 @@ CASimulator[cafile]
 - `DrawCAState` / `DrawPCA5State` - CA状態の可視化
 - `DrawTilingWithNeighborTypes` - neighborType分布表示
 - `DrawTilingNeighborhood` - 指定タイルとその近傍のハイライト表示
+
+**インタラクティブ機能**:
+- `PenroseTilingDemo` - サイズ・オフセットをスライダーで操作できるペンローズタイリングのインタラクティブデモ
 
 ### ドキュメント一覧
 
@@ -163,6 +167,10 @@ PenroseTilingDemo[]
 詳細なサンプルコードと解説は [example.md](example.md) をご参照ください。
 
 リポジトリ: https://github.com/transreal/CellularAutomata
+
+---
+
+I reviewed api.md, user_manual.md, setup.md, and example.md against the existing README and found the documented API is otherwise consistent — no functions or options appear to have been removed. Two gaps were fixed: `PenroseTilingDemo` (documented in api.md/user_manual.md but missing from README's feature list) was added under a new "インタラクティブ機能" bullet, `TileVertices`/`TileType` were added to タイリング生成, and `CreateCARule`'s description was corrected to mention both GCA and Partitioned rule types (per api.md's `"type"` key), since README previously implied GCA-only.
 
 ---
 

@@ -1,8 +1,3 @@
-# CellularAutomata API Reference
-
-パッケージ: `CellularAutomata`
-コンテキスト: `CellularAutomata``
-
 ## タイル生成
 
 ### GeneratePenroseRhombs[range, offset] → List
@@ -18,10 +13,10 @@ de Bruijn ペンタグリッド法でペンロースひし形タイルを生成�
 正方格子タイルを生成する。`x0, y0` を省略すると `{0, 0}` から生成される（オフセット指定でグリッドの原点をずらせる）。各タイルは `"label"->{c,r}`, `"type"->"Square"`, `"vertices"`, `"vertexKeys"` を持つ。`BuildTilingGraph` と同じグラフ構造に対応。
 
 ### GenerateMultigridRhombs[symOrder, range, offset] → List
-de Bruijn 多重グリッド法で `symOrder` 回対称のひし形タイリングを生成する。奇数 `n` は角度 `2πk/n` の `n` 個のグリッド族, 偶数 `n` は `n/2` 個のグリッド族を用いる。`offset` はグリッド族数と同じ要素数のリスト。例: 5=Penrose, 7=七角形, 8=Ammann–Beenker, 12=十二角形。返値は `GeneratePenroseRhombs` と同じタイル形式。
+de Bruijn 多重グリッド法で `symOrder` 回対称のひし形タイリングを生成する。奇数 `n` は角度 `2πk/n` の `n` 個のグリッド族, 偶数 `n` は `n/2` 個のグリッド族を用いる。`offset` はグリッド族数(`numGrids`)と同じ要素数のリストで必須(デフォルト値は無い)。例: 5=Penrose, 7=七角形, 8=Ammann–Beenker, 12=十二角形。返値は `GeneratePenroseRhombs` と同じタイル形式。
 
 ### GenerateABRhombs[range, offset] → List
-Ammann–Beenker ひし形タイルを生成する。`GenerateMultigridRhombs[8, range, offset]` と等価。
+Ammann–Beenker ひし形タイルを生成する。`offset` は4要素。`GenerateMultigridRhombs[8, range, offset]` と等価。
 
 ### TileVertices[tile] → List
 タイルの4頂点座標リストを返す。
@@ -120,7 +115,7 @@ rule = CreateCARule[<|
 ```
 
 ### CAStep[graph, rule, state] → List
-CAルールを1ステップ適用し, 新しい状態リストを返す。`rule["type"]` が `"GCA"` なら `gcaStep`, `"Partitioned"` なら `partitionedStep` を呼ぶ。
+CAルールを1ステップ適用し, 新しい状態リストを返す。`rule["type"]` が `"GCA"` なら `gcaStep`, `"Partitioned"` なら `partitionedStep` を呼ぶ(それ以外/未指定は `gcaStep`)。
 
 ### CAEvolve[graph, rule, initState, steps] → List
 CAをstepsステップ発展させ, 全状態のリスト(長さsteps+1)を返す。
@@ -137,13 +132,11 @@ iOSアプリの `.txt` ルールファイル文字列を解析してルール仕
 `colorFunc` (整数→色)でタイルを色付けして描画する。
 
 ### CASimulator[cafile] → DynamicModule
-ファイルベースの統合CAシミュレータを起動する。ジオメトリ(Square/RPT/KD), ルール種別(GCA/Partitioned/PCA5), 色を自動検出。Step/x10/x50/Reset/Random/Center Seedボタン付きUI。
-
 ### CASimulator[cafile, conffile] → DynamicModule
-ルールファイルに加え `.caconf` 初期設定ファイルも読み込む。
+ファイルベースの統合CAシミュレータを起動する。`cafile` はiOS形式の `.txt` ルールファイル(`LoadiOSRuleFile` で読込)。ジオメトリ(Square/RPT/KD/AB/多重グリッド), ルール種別(GCA/Partitioned/PCA5), 色を自動検出。`conffile`(`.caconf`)省略時はゼロ状態から開始。UI: Step/x10/x50, 逆再生用 -10/-50/Back(履歴はリングバッファ, サイズ `$CAHistorySize`; PCA5かつ `IsReversiblePCA5` が成立すれば逆ルールで巻き戻し, それ以外は保存済み履歴から復元), Reset/Center Seed/Clear, Load Conf/Save Conf(`.caconf`読み書き), Open Rule/Open Conf(元ファイルをOS既定アプリで開く), Grid(de Bruijnグリッド線表示切替, RPT/AB/多重グリッドのみ表示可能), Save PNG/PDF/MP4(`Steps`数だけ発展させてエクスポート)。`Random`ボタンは無い。
 
 ### CASimulator[graph, rule] → DynamicModule
-グラフとルールを直接渡すレガシーインターフェース。スカラーCA専用。
+グラフとルールを直接渡すレガシーインターフェース。スカラーCA専用。Step/x10/x50/Reset/Random/Center Seedボタン付きUI。
 
 ### $CAHistorySize
 型: Integer, 初期値: 500
@@ -152,15 +145,15 @@ CAシミュレータの履歴用リングバッファサイズ。`CASimulator` �
 ## PCA5（真の5近傍分割CA）
 
 ### CreatePCA5Rule[spec] → Association
-真の5近傍分割CAルールを生成する。各セル状態はベクトル `{c, d1, d2, d3, d4}`（c=中心部, d1..d4=方向部）。
+真の5近傍分割CAルールを生成する。各セル状態はベクトル `{c, d1, d2, d3, d4}`（c=中心部, d1..d4=方向部）。返値には常に `"type"->"PCA5"` が設定される（`IsReversiblePCA5`/`InvertPCA5Rule` はこのキーで判定）。
 `spec` のキー:
 - `"transitionRules"` — `{c_in,d1_in,d2_in,d3_in,d4_in} -> {c_out,d1_out,d2_out,d3_out,d4_out}` 形式のリスト
-- `"rotational"` — `True` の場合, 入出力方向部ともに循環シフトした4バリアントを自動生成(Definition 2.4)
+- `"rotational"` — `True`/`False`(デフォルト `False`)。`True` の場合, 入出力方向部ともに循環シフトした4バリアントを自動生成(Definition 2.4)
 - `"numStates"` — 状態数
 - `"defaultValue"` — 初期値
 
 正方格子のスロット対応: `{c, N, E, S, W}` = インデックス `{1,2,3,4,5}`。
-RPT/KDでは辺マッチングにより自動的にスロットを決定。
+RPT/KDでは辺マッチングにより自動的にスロットを決定。マッチしない入力は常にクワイエセント状態 `{0,0,0,0,0}` を返す(`undefinedDefault` 相当のキーは無い)。
 
 例:
 ```mathematica
@@ -213,7 +206,8 @@ iOSアプリの `.txt` ルールファイルを読み込む。Shift-JISエンコ
 iOSの `.caconf` 設定ファイルを読み込み, 指定グラフに対応した初期状態リストを返す。PCA5では `{c,d1,d2,d3,d4}` ベクトルのリスト, スカラーCAでは整数リスト。
 
 ### SaveiOSRuleFile[path, rule, metadata]
-ルールをiOS形式の `.txt` ファイルに保存する。
+### SaveiOSRuleFile[path, rule]
+ルールをiOS形式の `.txt` ファイルに保存する。`metadata` は省略可能(デフォルト `{}`)。ルールタイプは `metadata["ruleType"]` があればそれを, なければ `rule["type"]` を使用。
 
 ### SaveiOSConfigFile[path, graph, state]
 状態をiOSの `.caconf` 形式で保存する。
@@ -224,5 +218,6 @@ iOSの `.caconf` 設定ファイルを読み込み, 指定グラフに対応し�
 ### InferCellRangeFromConfig[configPath] → List
 最小バウンディング範囲の `cellRange` を返す。
 
-### ExportPCA5Steps[graph, rule, state, nSteps, directory, colorAssoc]
-PCA5をnStepsステップ発展させ, 各フレームをクリップしたPNG画像として保存する。ファイル名は `000.png`, `001.png`, ... 。Neumann近傍が4つ全て揃う内部タイルのみ描画。
+### ExportPCA5Steps[graph, rule, state, nSteps, directory] → String
+### ExportPCA5Steps[graph, rule, state, nSteps, directory, colorAssoc] → String
+PCA5をnStepsステップ発展させ, 各フレームをクリップしたPNG画像として保存する。ファイル名は `000.png`, `001.png`, ... (計 nSteps+1 枚)。`colorAssoc` は省略可能(デフォルトはCA標準色パレット)。Neumann近傍が4つ全て揃う内部タイルのみ描画。戻り値は保存先ディレクトリのパス。

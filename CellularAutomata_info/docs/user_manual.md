@@ -496,3 +496,38 @@ iOSルールファイルから統合シミュレーターを起動するワー�
    ジオメトリ・ルールタイプ・配色が自動検出される *)
 CASimulator["MyRule.txt", "MyConfig.caconf"];
 ```
+
+### SR8リボンワーム／ループ実験（CASimulatorによる設計済みルールの読み込み）
+
+`CASimulator`はルールファイル（.txt）と設定ファイル（.caconf）を指定するだけでジオメトリ・ルールタイプ・配色を自動検出するため、事前に設計された研究用ルールセットをそのまま読み込んで再生することができます。パッケージには、RPT（ペンローズ・ロンブタイリング）上のde Bruijnリボン構造に沿って走る「SR8」系スカラーCAルールの実験例が同梱されています。
+
+**ルールファイル:**
+
+| ファイル | 内容 |
+|---|---|
+| `sr8RPT-ribbonworms.txt` | de Bruijnリボンに沿って直進する最短3セルのワーム。ヘッドで読み取る信号ペアにより、(A,A)=直進、(B,B)=2方向分岐、(B,A)=3方向分岐という振る舞いを持つ。 |
+| `sr8RPT-ribbonworms-large.txt` | 上記のワーム/分岐/ループ構造を、より大きな盤面・より長いボディ（8セル版など）に拡張した版。 |
+| `sr8RPTx.txt` | SR8を「実際に到達した入力のみ」について自動補完（auto-completed）したもの。定義済みの挙動はSR8と変わらないが、未定義入力での旧来のクラッシュが消滅を招く代わりにコンパクトな静的デブリとして固化するように拡張されている。可逆拡張可能性（reversible-extendable）を保ったまま局所写像を閉じている。 |
+| `sr8RPTd.txt` | 状態8（トレースマーカー）・状態3（フォトン）を加えた9状態への設計拡張版。スプライス＆カット・ドッキング（ワイヤーセルが頭部に接触すると上流の結合が切られ、置き換わったセルが新たな頭部になる）を実装。同じルールでワームからループへの変換も行える。マーカーはワイヤーを透過または偏向し、空セル領域では自由に飛んでいく。 |
+
+**設定ファイル（初期配置）:** `sr8RPT-ribbonworm-straight.caconf`（直進ワーム）、`sr8RPT-ribbonworm-branch2.caconf` / `sr8RPT-ribbonworm-branch2-L8.caconf`（2方向分岐、コム状に自己複製する）、`sr8RPT-ribbonworm-branch3.caconf` / `sr8RPT-ribbonworm-branch3-L8.caconf`（3方向分岐、指数的に増える木構造でいずれ自己衝突する）、`sr8RPT-loop-deg4-DB.caconf`（次数4頂点上のループ、"AA gene"）。
+
+**例:**
+```mathematica
+(* 直進・分岐ワームをRPT上で再生 *)
+CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-straight.caconf"];
+CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-branch2.caconf"];
+CASimulator["sr8RPT-ribbonworms.txt", "sr8RPT-ribbonworm-branch3.caconf"];
+
+(* 拡張版ルールでより大きな盤面・8セルボディの分岐ワームを再生 *)
+CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-ribbonworm-branch2-L8.caconf"];
+CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-ribbonworm-branch3-L8.caconf"];
+CASimulator["sr8RPT-ribbonworms-large.txt", "sr8RPT-loop-deg4-DB.caconf"];
+
+(* auto-completed版（sr8RPTx）とdesigned 9-state版（sr8RPTd）でループを再生 *)
+CASimulator["sr8RPTx.txt", "sr8RPT-loop-deg4-DB.caconf"];
+CASimulator["sr8RPTx.txt", "sr8RPT-ribbonworm-branch3.caconf"];
+CASimulator["sr8RPTd.txt", "sr8RPT-loop-deg4-DB.caconf"];
+```
+
+これらの例で観察される代表的な挙動：正方格子上ではbranch2構造が自己複製する一方、RPT上では指数的に分岐するbranch3系列がいずれ自己衝突する（branch3の2世代目は約26ステップで衝突、8セル版branch3-L8は約234ステップ＝4世代分は衝突なく成長する。8セル版branch2-L8は800ステップ以上衝突なく成長し続ける）。次数4頂点のループはRPTd上でワンダラー（さまよう部分構造）の帰還を吸収し、母構造は無傷のまま小さなワームを放出する。ルールテーブルはRPT側で765+4804=5569ルールに達し、単射性（可逆性）が機械的に検証されている。ルールセットの再生成・拡張には`sr8RPTx_generator.wl`を使用する。
