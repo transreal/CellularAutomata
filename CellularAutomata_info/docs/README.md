@@ -1,5 +1,7 @@
 # CellularAutomata
 
+**日本語** | [English](en/README.md)
+
 ペンローズタイリングと正方格子上でのセルラーオートマトンシミュレーションパッケージです。
 
 ## 設計思想と実装の概要
@@ -127,10 +129,10 @@ CASimulator[cafile]
 
 ### ドキュメント一覧
 
-- **api.md** - 完全API リファレンス
-- **example.md** - 実用的な使用例集
-- **setup.md** - 詳細セットアップガイド  
-- **user_manual.md** - 包括的ユーザーマニュアル
+- **[api.md](api.md)** - 完全API リファレンス
+- **[example.md](examples/example.md)** - 実用的な使用例集
+- **[setup.md](setup.md)** - 詳細セットアップガイド
+- **[user_manual.md](user_manual.md)** - 包括的ユーザーマニュアル
 
 ## 使用例・デモ
 
@@ -164,13 +166,9 @@ DrawABTiling[abTiles]
 PenroseTilingDemo[]
 ```
 
-詳細なサンプルコードと解説は [example.md](example.md) をご参照ください。
+詳細なサンプルコードと解説は [example.md](examples/example.md) をご参照ください。
 
 リポジトリ: https://github.com/transreal/CellularAutomata
-
----
-
-I reviewed api.md, user_manual.md, setup.md, and example.md against the existing README and found the documented API is otherwise consistent — no functions or options appear to have been removed. Two gaps were fixed: `PenroseTilingDemo` (documented in api.md/user_manual.md but missing from README's feature list) was added under a new "インタラクティブ機能" bullet, `TileVertices`/`TileType` were added to タイリング生成, and `CreateCARule`'s description was corrected to mention both GCA and Partitioned rule types (per api.md's `"type"` key), since README previously implied GCA-only.
 
 ---
 

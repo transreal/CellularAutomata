@@ -1,3 +1,5 @@
+**日本語** | [English](en/api.md)
+
 ## タイル生成
 
 ### GeneratePenroseRhombs[range, offset] → List

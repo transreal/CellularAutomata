@@ -1,5 +1,7 @@
 # 使用例
 
+**日本語** | [English](../en/examples/example.md)
+
 このドキュメントでは、CellularAutomataパッケージの主要な機能を実際の使用例で紹介します。
 
 ## 1. ペンローズ菱形タイリングの生成と描画

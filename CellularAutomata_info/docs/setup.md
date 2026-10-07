@@ -1,5 +1,7 @@
 # CellularAutomata セットアップガイド
 
+**日本語** | [English](en/setup.md)
+
 ## 動作環境
 
 - **Wolfram Mathematica 12.0** 以上（推奨: 13.0以上）
